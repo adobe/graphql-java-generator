@@ -89,7 +89,8 @@ import java.util.Map;
 
                 <% fields.each do |field| %>
                     <%= java_doc(field) %>
-                    <%= java_annotations(field) %>
+                    <%= java_annotations(field) -%>
+                    <%= field.deprecated? ? "@Deprecated\n" : '' -%>
                     public <%= java_output_type(field.type) %> get<%= field.classify_name %>() {
                       return (<%= java_output_type(field.type) %>) get("<%= field.name %>");
                     }
