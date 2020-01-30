@@ -24,6 +24,7 @@ import java.util.Map;
 
 <% required_input_fields = type.required_input_fields.sort_by{ |field| field.name } || [] %>
 <% optional_input_fields = type.optional_input_fields.sort_by{ |field| field.name } || [] %>
+<%= java_doc(type) %>
 public class <%= type.name %> implements Serializable {
     <% required_input_fields.each do |field| %>
       private <%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>;
@@ -42,10 +43,12 @@ public class <%= type.name %> implements Serializable {
 
     <% required_input_fields.each do |field| %>
       <%= java_annotations(field) %>
+      <%= java_doc(field) %>
       public <%= java_input_type(field.type) %> get<%= field.classify_name %>() {
           return <%= escape_reserved_word(field.camelize_name) %>;
       }
 
+      <%= java_doc(field) %>
       public <%= type.name %> set<%= field.classify_name %>(<%= java_annotations(field, in_argument: true) %><%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
           this.<%= escape_reserved_word(field.camelize_name) %> = <%= escape_reserved_word(field.camelize_name) %>;
           return this;
@@ -54,19 +57,23 @@ public class <%= type.name %> implements Serializable {
     <% end %>
     <% optional_input_fields.each do |field| %>
       <%= java_annotations(field) %>
+      <%= java_doc(field) %>
       public <%= java_input_type(field.type) %> get<%= field.classify_name %>() {
           return <%= escape_reserved_word(field.camelize_name) %>.getValue();
       }
 
+      <%= java_doc(field) %>
       public Input<<%= java_input_type(field.type) %>> get<%= field.classify_name %>Input() {
           return <%= escape_reserved_word(field.camelize_name) %>;
       }
 
+      <%= java_doc(field) %>
       public <%= type.name %> set<%= field.classify_name %>(<%= java_annotations(field, in_argument: true) %><%= java_input_type(field.type) %> <%= escape_reserved_word(field.camelize_name) %>) {
           this.<%= escape_reserved_word(field.camelize_name) %> = Input.optional(<%= escape_reserved_word(field.camelize_name) %>);
           return this;
       }
 
+      <%= java_doc(field) %>
       public <%= type.name %> set<%= field.classify_name %>Input(Input<<%= java_input_type(field.type) %>> <%= escape_reserved_word(field.camelize_name) %>) {
           if (<%= escape_reserved_word(field.camelize_name) %> == null) {
               throw new IllegalArgumentException("Input can not be null");
