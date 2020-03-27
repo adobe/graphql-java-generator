@@ -78,7 +78,7 @@ class GraphQLJavaGen
   end
 
   def write_entities(path)
-    schema.types.reject{ |type| type.name.start_with?('__') || type.scalar? }.each do |type|
+    schema.types.reject{ |type| type.scalar? }.each do |type|
       case type.kind when 'OBJECT', 'INTERFACE', 'UNION'
                        File.write(path + "/#{type.name}QueryDefinition.java", generate_entity("QueryDefinition.java", type))
                        File.write(path + "/#{type.name}Query.java", generate_entity("Query.java", type))

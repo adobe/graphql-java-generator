@@ -48,7 +48,30 @@ import java.util.Map;
                         responseData.put(key, jsonAsString(field.getValue(), key));
                         break;
                       }
+                      <%if class_name == "Query" %>
                       
+                      case "__schema": {
+                        __Schema optional1 = null;
+                        if (!field.getValue().isJsonNull()) {
+                            optional1 = new __Schema(jsonAsObject(field.getValue(), key));
+                        }
+    
+                        responseData.put(key, optional1);
+    
+                        break;
+                      }
+    
+                      case "__type": {
+                        __Type optional1 = null;
+                        if (!field.getValue().isJsonNull()) {
+                            optional1 = new __Type(jsonAsObject(field.getValue(), key));
+                        }
+    
+                        responseData.put(key, optional1);
+    
+                        break;
+                      }
+                      <% end %>
                       default: {
                         readCustomField(fieldName, field.getValue());
                       }
@@ -99,6 +122,22 @@ import java.util.Map;
                     public <%= class_name %> set<%= field.classify_name %>(<%= java_output_type(field.type) %> arg) {
                       optimisticData.put(getKey("<%= field.name %>"), arg);
                       return this;
+                    }
+                <% end %>
+                <% if class_name == "Query" %>
+
+                    /**
+                    * The root __schema field for introspection queries.
+                    */
+                    public __Schema __getSchema() {
+                      return (__Schema) get("__schema");
+                    }
+              
+                    /**
+                    * The root __type field for introspection queries.
+                    */
+                    public __Type __getType() {
+                      return (__Type) get("__type");
                     }
                 <% end %>
 
