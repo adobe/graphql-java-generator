@@ -13,6 +13,7 @@ import com.shopify.graphql.support.AbstractQuery;
 import com.shopify.graphql.support.SchemaViolationError;
 import com.shopify.graphql.support.TopLevelResponse;
 import com.shopify.graphql.support.Input;
+import com.shopify.graphql.support.Fragment;
 <% imports.each do |import| %>
   import <%= import %>;
 <% end %>
@@ -20,21 +21,36 @@ import com.shopify.graphql.support.Input;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+<%- if schema.root_name?(type.name) -%>
+import java.util.LinkedHashMap;
+<%- end -%>
 import java.util.Map;
 
 
 <% fields = type.fields(include_deprecated: include_deprecated).sort_by{ |field| field.name } || [] %>
 <%= java_doc(type) %>
 public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> {
+    <% if type.object? %>
     <%= type.name %>Query(StringBuilder _queryBuilder) {
         super(_queryBuilder);
         <% if type.object? && type.implement?("Node") %>
             startField("id");
         <% end %>
-        <% unless type.object? %>
-            startField("__typename");
-        <% end %>
     }
+    <% else %>
+    <%= type.name %>Query(StringBuilder _queryBuilder) {
+        this(_queryBuilder, true);
+    }
+    <%= type.name %>Query(StringBuilder _queryBuilder, boolean addTypename) {
+        super(_queryBuilder);
+        <%- if type.object? && type.implement?("Node") -%>
+            startField("id");
+        <%- end -%>
+        if (addTypename) {
+            startField("__typename");
+        }
+    }
+    <% end %>
 
     <% fields.each do |field| %>
         <% next if field.name == "id" && type.object? && type.implement?("Node") %>
@@ -107,7 +123,28 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
 
     <% if schema.root_name?(type.name) %>
       public String toString() {
+          if (fragments != null) {
+              for (Fragment fragment : fragments.values()) {
+                  _queryBuilder.append(fragment.toString());
+              }
+          }
           return _queryBuilder.toString();
+      }
+
+      private Map<String, Fragment> fragments;
+
+      /**
+       * Adds a GraphQL "named" fragment to the query. If a fragment with the same name is already added,
+       * calling this method will replace the existing fragment.
+       * 
+       * @param fragment The fragment to add.
+      */
+      public <%= type.name %>Query addFragment(Fragment fragment) {
+          if (fragments == null) {
+              fragments = new LinkedHashMap<>();
+          }
+          fragments.put(fragment.getName(), fragment);
+          return this;
       }
     <% end %>
     <% if type.name == "Query" %>
@@ -141,5 +178,52 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
 
         return this;
       }
+    <% end %>
+
+    /**
+     * Creates a GraphQL "named" fragment with the specified query type definition.
+     * The generics nature of fragments ensures that a fragment can only be used at the right place in the GraphQL request.
+     * 
+     * @param name The name of the fragment, must be unique for a given GraphQL request.
+     * @param queryDef The fragment definition.
+     * @return The fragment of a given generics type.
+     */
+    public static Fragment<<%= type.name %>Query> createFragment(String name, <%= type.name %>QueryDefinition queryDef) {
+        StringBuilder sb = new StringBuilder();
+        <%- if type.object? -%>
+        queryDef.define(new <%= type.name %>Query(sb));
+        <%- else -%>
+        queryDef.define(new <%= type.name %>Query(sb, false));
+        <%- end -%>
+        return new Fragment<>(name, "<%= type.name %>", sb.toString());
+    }
+
+    /**
+     * Adds a <code><%= type.name %>Query</code> fragment reference at the current position of the query.
+     * For example for a fragment named <code>test</code>, calling this method will add the
+     * reference <code>...test</code> in the query. For GraphQL types implementing an interface, there
+     * will be some similar methods using the Query type of each implemented interface.
+     * 
+     * @param fragment The fragment to reference.
+     */
+    public <%= type.name %>Query addFragmentReference(Fragment<<%= type.name %>Query> fragment) {
+        startField("..." + fragment.getName());
+        return this;
+    }
+
+    <% if type.object? && !type.interfaces.empty? %>
+    <% type.interfaces.each do |interface| %>
+    /**
+    * Adds a <code><%= interface.name %>Query</code> fragment reference at the current position of the query.
+    * For example for a fragment named <code>test</code>, calling this method will add the
+    * reference <code>...test</code> in the query.
+    * 
+    * @param fragment The fragment to reference.
+    */
+    public <%= type.name %>Query add<%= interface.name %>FragmentReference(Fragment<<%= interface.name %>Query> fragment) {
+        startField("..." + fragment.getName());
+        return this;
+    }
+    <% end %>
     <% end %>
 }
