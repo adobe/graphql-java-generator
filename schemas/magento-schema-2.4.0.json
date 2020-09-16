@@ -442,6 +442,69 @@
                             "deprecationReason": null
                         },
                         {
+                            "name": "pickupLocations",
+                            "description": "The pickup locations query searches for locations that match the search request requirements.",
+                            "args": [
+                                {
+                                    "name": "area",
+                                    "description": "Perform search by location using radius and search term.",
+                                    "type": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "AreaInput",
+                                        "ofType": null
+                                    },
+                                    "defaultValue": null
+                                },
+                                {
+                                    "name": "filters",
+                                    "description": "Apply filters by attributes.",
+                                    "type": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "PickupLocationFilterInput",
+                                        "ofType": null
+                                    },
+                                    "defaultValue": null
+                                },
+                                {
+                                    "name": "sort",
+                                    "description": "Specifies which attribute to sort on, and whether to return the results in ascending or descending order.",
+                                    "type": {
+                                        "kind": "INPUT_OBJECT",
+                                        "name": "PickupLocationSortInput",
+                                        "ofType": null
+                                    },
+                                    "defaultValue": null
+                                },
+                                {
+                                    "name": "pageSize",
+                                    "description": "The maximum number of pickup locations to return at once. The attribute is optional.",
+                                    "type": {
+                                        "kind": "SCALAR",
+                                        "name": "Int",
+                                        "ofType": null
+                                    },
+                                    "defaultValue": "20"
+                                },
+                                {
+                                    "name": "currentPage",
+                                    "description": "Specifies which page of results to return. The default value is 1.",
+                                    "type": {
+                                        "kind": "SCALAR",
+                                        "name": "Int",
+                                        "ofType": null
+                                    },
+                                    "defaultValue": "1"
+                                }
+                            ],
+                            "type": {
+                                "kind": "OBJECT",
+                                "name": "PickupLocations",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
                             "name": "products",
                             "description": "The products query searches for products that match the criteria specified in the search and filter attributes.",
                             "args": [
@@ -5479,6 +5542,18 @@
                             "deprecationReason": null
                         },
                         {
+                            "name": "pickup_location_code",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
                             "name": "postcode",
                             "description": null,
                             "args": [],
@@ -9941,6 +10016,722 @@
                 },
                 {
                     "kind": "INPUT_OBJECT",
+                    "name": "AreaInput",
+                    "description": "AreaInput defines the parameters which will be used for filter by specified location.",
+                    "fields": null,
+                    "inputFields": [
+                        {
+                            "name": "radius",
+                            "description": "The radius for the search in KM.",
+                            "type": {
+                                "kind": "NON_NULL",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "Int",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "search_term",
+                            "description": "The country code where search must be performed. Required parameter together with region, city or postcode.",
+                            "type": {
+                                "kind": "NON_NULL",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        }
+                    ],
+                    "interfaces": null,
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PickupLocationFilterInput",
+                    "description": "PickupLocationFilterInput defines the list of attributes and filters for the search.",
+                    "fields": null,
+                    "inputFields": [
+                        {
+                            "name": "city",
+                            "description": "Filter by city.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "country_id",
+                            "description": "Filter by country.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "name",
+                            "description": "Filter by pickup location name.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "pickup_location_code",
+                            "description": "Filter by pickup location code.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "postcode",
+                            "description": "Filter by postcode.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "region",
+                            "description": "Filter by region.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "region_id",
+                            "description": "Filter by region id.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "street",
+                            "description": "Filter by street.",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "FilterTypeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        }
+                    ],
+                    "interfaces": null,
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "INPUT_OBJECT",
+                    "name": "FilterTypeInput",
+                    "description": "FilterTypeInput specifies which action will be performed in a query ",
+                    "fields": null,
+                    "inputFields": [
+                        {
+                            "name": "eq",
+                            "description": "Equals",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "finset",
+                            "description": "",
+                            "type": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "from",
+                            "description": "From. Must be used with 'to'",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "gt",
+                            "description": "Greater than",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "gteq",
+                            "description": "Greater than or equal to",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "in",
+                            "description": "In. The value can contain a set of comma-separated values",
+                            "type": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "like",
+                            "description": "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "lt",
+                            "description": "Less than",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "lteq",
+                            "description": "Less than or equal to",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "moreq",
+                            "description": "More than or equal to",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "neq",
+                            "description": "Not equal to",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "nin",
+                            "description": "Not in. The value can contain a set of comma-separated values",
+                            "type": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "notnull",
+                            "description": "Not null",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "null",
+                            "description": "Is null",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "to",
+                            "description": "To. Must be used with 'from'",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        }
+                    ],
+                    "interfaces": null,
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "INPUT_OBJECT",
+                    "name": "PickupLocationSortInput",
+                    "description": "PickupLocationSortInput specifies attribute to use for sorting search results and indicates whether the results are sorted in ascending or descending order.",
+                    "fields": null,
+                    "inputFields": [
+                        {
+                            "name": "city",
+                            "description": "City where pickup location is placed.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "contact_name",
+                            "description": "Name of the contact person.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "country_id",
+                            "description": "Id of the country in two letters.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "description",
+                            "description": "Description of the pickup location.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "distance",
+                            "description": "Distance to the address, requested by distance filter. Applicable only with distance filter. If distance sort order is present, all other sort orders will be ignored.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "email",
+                            "description": "Contact email of the pickup location.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "fax",
+                            "description": "Contact fax of the pickup location.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "latitude",
+                            "description": "Geographic latitude where pickup location is placed.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "longitude",
+                            "description": "Geographic longitude where pickup location is placed.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "name",
+                            "description": "The pickup location name. Customer use this to identify the pickup location.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "phone",
+                            "description": "Contact phone number of the pickup location.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "pickup_location_code",
+                            "description": "A code assigned to pickup location to identify the source.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "postcode",
+                            "description": "Postcode where pickup location is placed.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "region",
+                            "description": "Name of the region.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "region_id",
+                            "description": "Id of the region.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "street",
+                            "description": "Street where pickup location is placed.",
+                            "type": {
+                                "kind": "ENUM",
+                                "name": "SortEnum",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        }
+                    ],
+                    "interfaces": null,
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "OBJECT",
+                    "name": "PickupLocations",
+                    "description": "Top level object returned in a pickup locations search.",
+                    "fields": [
+                        {
+                            "name": "items",
+                            "description": "An array of pickup locations that match the specific search request.",
+                            "args": [],
+                            "type": {
+                                "kind": "LIST",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "OBJECT",
+                                    "name": "PickupLocation",
+                                    "ofType": null
+                                }
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "page_info",
+                            "description": "An object that includes the page_info and currentPage values specified in the query.",
+                            "args": [],
+                            "type": {
+                                "kind": "OBJECT",
+                                "name": "SearchResultPageInfo",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "total_count",
+                            "description": "The number of products returned.",
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "Int",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        }
+                    ],
+                    "inputFields": null,
+                    "interfaces": [],
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "OBJECT",
+                    "name": "PickupLocation",
+                    "description": "Defines Pickup Location information.",
+                    "fields": [
+                        {
+                            "name": "city",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "contact_name",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "country_id",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "description",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "email",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "fax",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "latitude",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "Float",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "longitude",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "Float",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "name",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "phone",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "pickup_location_code",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "postcode",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "region",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "region_id",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "Int",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "street",
+                            "description": null,
+                            "args": [],
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        }
+                    ],
+                    "inputFields": null,
+                    "interfaces": [],
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "INPUT_OBJECT",
                     "name": "ProductAttributeFilterInput",
                     "description": "ProductAttributeFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.",
                     "fields": null,
@@ -11632,6 +12423,22 @@
                                 "kind": "OBJECT",
                                 "name": "Customer",
                                 "ofType": null
+                            },
+                            "isDeprecated": false,
+                            "deprecationReason": null
+                        },
+                        {
+                            "name": "createBraintreeClientToken",
+                            "description": "Creates Client Token for Braintree Javascript SDK initialization.",
+                            "args": [],
+                            "type": {
+                                "kind": "NON_NULL",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
                             },
                             "isDeprecated": false,
                             "deprecationReason": null
@@ -15223,6 +16030,26 @@
                     "fields": null,
                     "inputFields": [
                         {
+                            "name": "braintree",
+                            "description": "",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "BraintreeInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "braintree_cc_vault",
+                            "description": "",
+                            "type": {
+                                "kind": "INPUT_OBJECT",
+                                "name": "BraintreeCcVaultInput",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
                             "name": "code",
                             "description": "Payment method code",
                             "type": {
@@ -15293,6 +16120,90 @@
                                 "kind": "SCALAR",
                                 "name": "String",
                                 "ofType": null
+                            },
+                            "defaultValue": null
+                        }
+                    ],
+                    "interfaces": null,
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "INPUT_OBJECT",
+                    "name": "BraintreeInput",
+                    "description": "",
+                    "fields": null,
+                    "inputFields": [
+                        {
+                            "name": "device_data",
+                            "description": "Contains a fingerprint provided by Braintree JS SDK and should be sent with sale transaction details to the Braintree payment gateway. Should be specified only in a case if Kount (advanced fraud protection) is enabled for Braintree payment integration.",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "is_active_payment_token_enabler",
+                            "description": "States whether an entered by a customer credit\/debit card should be tokenized for later usage. Required only if Vault is enabled for Braintree payment integration.",
+                            "type": {
+                                "kind": "NON_NULL",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "Boolean",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "payment_method_nonce",
+                            "description": "The one-time payment token generated by Braintree payment gateway based on card details. Required field to make sale transaction.",
+                            "type": {
+                                "kind": "NON_NULL",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
+                            },
+                            "defaultValue": null
+                        }
+                    ],
+                    "interfaces": null,
+                    "enumValues": null,
+                    "possibleTypes": null
+                },
+                {
+                    "kind": "INPUT_OBJECT",
+                    "name": "BraintreeCcVaultInput",
+                    "description": "",
+                    "fields": null,
+                    "inputFields": [
+                        {
+                            "name": "device_data",
+                            "description": "",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "public_hash",
+                            "description": "",
+                            "type": {
+                                "kind": "NON_NULL",
+                                "name": null,
+                                "ofType": {
+                                    "kind": "SCALAR",
+                                    "name": "String",
+                                    "ofType": null
+                                }
                             },
                             "defaultValue": null
                         }
@@ -15701,6 +16612,16 @@
                         {
                             "name": "customer_notes",
                             "description": "",
+                            "type": {
+                                "kind": "SCALAR",
+                                "name": "String",
+                                "ofType": null
+                            },
+                            "defaultValue": null
+                        },
+                        {
+                            "name": "pickup_location_code",
+                            "description": "The code of Pickup Location which will be used for In-Store Pickup.",
                             "type": {
                                 "kind": "SCALAR",
                                 "name": "String",
@@ -16804,179 +17725,6 @@
                             "deprecationReason": null
                         }
                     ],
-                    "possibleTypes": null
-                },
-                {
-                    "kind": "INPUT_OBJECT",
-                    "name": "FilterTypeInput",
-                    "description": "FilterTypeInput specifies which action will be performed in a query ",
-                    "fields": null,
-                    "inputFields": [
-                        {
-                            "name": "eq",
-                            "description": "Equals",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "finset",
-                            "description": "",
-                            "type": {
-                                "kind": "LIST",
-                                "name": null,
-                                "ofType": {
-                                    "kind": "SCALAR",
-                                    "name": "String",
-                                    "ofType": null
-                                }
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "from",
-                            "description": "From. Must be used with 'to'",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "gt",
-                            "description": "Greater than",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "gteq",
-                            "description": "Greater than or equal to",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "in",
-                            "description": "In. The value can contain a set of comma-separated values",
-                            "type": {
-                                "kind": "LIST",
-                                "name": null,
-                                "ofType": {
-                                    "kind": "SCALAR",
-                                    "name": "String",
-                                    "ofType": null
-                                }
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "like",
-                            "description": "Like. The specified value can contain % (percent signs) to allow matching of 0 or more characters",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "lt",
-                            "description": "Less than",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "lteq",
-                            "description": "Less than or equal to",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "moreq",
-                            "description": "More than or equal to",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "neq",
-                            "description": "Not equal to",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "nin",
-                            "description": "Not in. The value can contain a set of comma-separated values",
-                            "type": {
-                                "kind": "LIST",
-                                "name": null,
-                                "ofType": {
-                                    "kind": "SCALAR",
-                                    "name": "String",
-                                    "ofType": null
-                                }
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "notnull",
-                            "description": "Not null",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "null",
-                            "description": "Is null",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        },
-                        {
-                            "name": "to",
-                            "description": "To. Must be used with 'from'",
-                            "type": {
-                                "kind": "SCALAR",
-                                "name": "String",
-                                "ofType": null
-                            },
-                            "defaultValue": null
-                        }
-                    ],
-                    "interfaces": null,
-                    "enumValues": null,
                     "possibleTypes": null
                 },
                 {
