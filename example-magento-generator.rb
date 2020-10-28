@@ -2,7 +2,7 @@ require 'graphql_java_gen'
 require 'graphql_schema'
 require 'json'
 
-introspection_result = File.read("schemas/magento-schema-2.4.0.json")
+introspection_result = File.read("schemas/magento-schema-2.4.1ee.json")
 schema = GraphQLSchema.new(JSON.parse(introspection_result))
 
 GraphQLJavaGen.new(schema,
