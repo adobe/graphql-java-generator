@@ -147,7 +147,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
       /**
        * Adds a GraphQL "named" fragment to the query. If a fragment with the same name is already added,
        * calling this method will replace the existing fragment.
-       *
+       * 
        * @param fragment The fragment to add.
       */
       public <%= type.name %>Query addFragment(Fragment fragment) {
@@ -194,7 +194,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
     /**
      * Creates a GraphQL "named" fragment with the specified query type definition.
      * The generics nature of fragments ensures that a fragment can only be used at the right place in the GraphQL request.
-     *
+     * 
      * @param name The name of the fragment, must be unique for a given GraphQL request.
      * @param queryDef The fragment definition.
      * @return The fragment of a given generics type.
@@ -214,7 +214,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
      * For example for a fragment named <code>test</code>, calling this method will add the
      * reference <code>...test</code> in the query. For GraphQL types implementing an interface, there
      * will be some similar methods using the Query type of each implemented interface.
-     *
+     * 
      * @param fragment The fragment to reference.
      */
     public <%= type.name %>Query addFragmentReference(Fragment<<%= type.name %>Query> fragment) {
@@ -228,7 +228,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
     * Adds a <code><%= interface.name %>Query</code> fragment reference at the current position of the query.
     * For example for a fragment named <code>test</code>, calling this method will add the
     * reference <code>...test</code> in the query.
-    *
+    * 
     * @param fragment The fragment to reference.
     */
     public <%= type.name %>Query add<%= interface.name %>FragmentReference(Fragment<<%= interface.name %>Query> fragment) {
