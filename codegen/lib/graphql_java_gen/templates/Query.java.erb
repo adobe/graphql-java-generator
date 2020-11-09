@@ -51,6 +51,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
         }
     }
     <% end %>
+
     <% fields.each do |field| %>
         <% next if field.name == "id" && type.object? && type.implement?("Node") %>
         <% unless field.optional_args.empty? %>
