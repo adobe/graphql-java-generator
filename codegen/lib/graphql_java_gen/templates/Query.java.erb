@@ -51,7 +51,6 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
         }
     }
     <% end %>
-
     <% fields.each do |field| %>
         <% next if field.name == "id" && type.object? && type.implement?("Node") %>
         <% unless field.optional_args.empty? %>
@@ -111,10 +110,22 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
         }
     <% end %>
     <% unless type.object? %>
+        <% interfaceFragments = [] %>
         <% type.possible_types.each do |possible_type| %>
             public <%= type.name %>Query on<%= possible_type.name %>(<%= possible_type.name %>QueryDefinition queryDef) {
                 startInlineFragment("<%= possible_type.name %>");
                 queryDef.define(new <%= possible_type.name %>Query(_queryBuilder));
+                _queryBuilder.append('}');
+                return this;
+            }
+            <% schema.types_by_name[possible_type.name].interfaces.select {|intf| intf.name != type.name }.each do |intf| %>
+                <% interfaceFragments << intf.name %>
+            <% end %>
+        <% end %>
+        <% interfaceFragments.uniq.each do |interfaceFragment| %>
+            public <%= type.name %>Query on<%= interfaceFragment %>(<%= interfaceFragment %>QueryDefinition queryDef) {
+                startInlineFragment("<%= interfaceFragment %>");
+                queryDef.define(new <%= interfaceFragment %>Query(_queryBuilder));
                 _queryBuilder.append('}');
                 return this;
             }
@@ -136,7 +147,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
       /**
        * Adds a GraphQL "named" fragment to the query. If a fragment with the same name is already added,
        * calling this method will replace the existing fragment.
-       * 
+       *
        * @param fragment The fragment to add.
       */
       public <%= type.name %>Query addFragment(Fragment fragment) {
@@ -183,7 +194,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
     /**
      * Creates a GraphQL "named" fragment with the specified query type definition.
      * The generics nature of fragments ensures that a fragment can only be used at the right place in the GraphQL request.
-     * 
+     *
      * @param name The name of the fragment, must be unique for a given GraphQL request.
      * @param queryDef The fragment definition.
      * @return The fragment of a given generics type.
@@ -203,7 +214,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
      * For example for a fragment named <code>test</code>, calling this method will add the
      * reference <code>...test</code> in the query. For GraphQL types implementing an interface, there
      * will be some similar methods using the Query type of each implemented interface.
-     * 
+     *
      * @param fragment The fragment to reference.
      */
     public <%= type.name %>Query addFragmentReference(Fragment<<%= type.name %>Query> fragment) {
@@ -217,7 +228,7 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
     * Adds a <code><%= interface.name %>Query</code> fragment reference at the current position of the query.
     * For example for a fragment named <code>test</code>, calling this method will add the
     * reference <code>...test</code> in the query.
-    * 
+    *
     * @param fragment The fragment to reference.
     */
     public <%= type.name %>Query add<%= interface.name %>FragmentReference(Fragment<<%= interface.name %>Query> fragment) {
