@@ -111,10 +111,22 @@ public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> 
         }
     <% end %>
     <% unless type.object? %>
+        <% interfaceFragments = [] %>
         <% type.possible_types.each do |possible_type| %>
             public <%= type.name %>Query on<%= possible_type.name %>(<%= possible_type.name %>QueryDefinition queryDef) {
                 startInlineFragment("<%= possible_type.name %>");
                 queryDef.define(new <%= possible_type.name %>Query(_queryBuilder));
+                _queryBuilder.append('}');
+                return this;
+            }
+            <% schema.types_by_name[possible_type.name].interfaces.select {|intf| intf.name != type.name }.each do |intf| %>
+                <% interfaceFragments << intf.name %>
+            <% end %>
+        <% end %>
+        <% interfaceFragments.uniq.each do |interfaceFragment| %>
+            public <%= type.name %>Query on<%= interfaceFragment %>(<%= interfaceFragment %>QueryDefinition queryDef) {
+                startInlineFragment("<%= interfaceFragment %>");
+                queryDef.define(new <%= interfaceFragment %>Query(_queryBuilder));
                 _queryBuilder.append('}');
                 return this;
             }
