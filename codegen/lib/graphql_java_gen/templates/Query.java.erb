@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-<% fields = type.fields(include_deprecated: include_deprecated).sort_by{ |field| field.name } || [] %>
+<% fields = type.fields != nil ? type.fields(include_deprecated: include_deprecated).sort_by{ |field| field.name } : [] %>
 <%= java_doc(type) %>
 public class <%= type.name %>Query extends AbstractQuery<<%= type.name %>Query> {
     <% if type.object? %>
